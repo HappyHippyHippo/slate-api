@@ -2,15 +2,13 @@ module github.com/happyhippyhippo/slate-api
 
 go 1.18
 
-replace github.com/happyhippyhippo/slate => ../slate
-
 require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/golang/mock v1.6.0
-	github.com/happyhippyhippo/slate v0.0.0-00010101000000-000000000000
+	github.com/happyhippyhippo/slate v0.20.0
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/go-cache v0.0.0-20130306151617-9fc39e0dbf62
 )
