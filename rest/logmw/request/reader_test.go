@@ -1,4 +1,4 @@
-package logmw
+package request
 
 import (
 	"encoding/json"
@@ -12,12 +12,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/happyhippyhippo/slate"
+	"github.com/happyhippyhippo/slate-api/rest/logmw"
 	"github.com/happyhippyhippo/slate/log"
 )
 
 func Test_RequestReaderDefault(t *testing.T) {
 	t.Run("nil ctx", func(t *testing.T) {
-		if _, e := RequestReaderDefault(nil); e == nil {
+		if _, e := Reader(nil); e == nil {
 			t.Error("didn't returned the expected error")
 		} else if !errors.Is(e, slate.ErrNilPointer) {
 			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
@@ -41,7 +42,7 @@ func Test_RequestReaderDefault(t *testing.T) {
 		jsonBody := map[string]interface{}{"field": "value"}
 		rawBody, _ := json.Marshal(jsonBody)
 
-		body := NewMockReader(ctrl)
+		body := logmw.NewMockReader(ctrl)
 		gomock.InOrder(
 			body.
 				EXPECT().
@@ -60,7 +61,7 @@ func Test_RequestReaderDefault(t *testing.T) {
 		ctx.Request.Header = headers
 		ctx.Request.Body = body
 
-		data, _ := RequestReaderDefault(ctx)
+		data, _ := Reader(ctx)
 
 		t.Run("retrieve the request method", func(t *testing.T) {
 			if value := data["method"]; value != method {

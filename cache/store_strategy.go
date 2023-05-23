@@ -6,7 +6,7 @@ import (
 
 const (
 	// UnknownStoreType defines the value to be used to
-	// declare an unknown store type.
+	// declare an unknown Store type.
 	UnknownStoreType = "unknown"
 )
 

@@ -40,11 +40,19 @@ type IStore interface {
 	Flush() error
 }
 
-type store struct {
+// Store @todo doc
+type Store struct {
 	defaultExpiration time.Duration
 }
 
-func (s store) normalizeExpire(
+// NewStore @todo doc
+func NewStore(defaultExpiration time.Duration) *Store {
+	return &Store{
+		defaultExpiration: defaultExpiration,
+	}
+}
+
+func (s Store) normalizeExpire(
 	expire time.Duration,
 ) time.Duration {
 	switch expire {
@@ -56,7 +64,7 @@ func (s store) normalizeExpire(
 	return expire
 }
 
-func (store) serialize(
+func (Store) serialize(
 	value interface{},
 ) ([]byte, error) {
 	// check if the value can be directly converted into an array of bytes
@@ -73,12 +81,12 @@ func (store) serialize(
 	return b.Bytes(), nil
 }
 
-func (store) deserialize(
+func (Store) deserialize(
 	byt []byte,
 	ptr interface{},
 ) (e error) {
 	// check if the given pointer to an array of bytes
-	// meaning that can be directly used to store the source byte array
+	// meaning that can be directly used to Store the source byte array
 	if b, ok := ptr.(*[]byte); ok {
 		*b = byt
 		return nil

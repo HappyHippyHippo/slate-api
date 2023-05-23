@@ -70,12 +70,12 @@ func (e *StatusError) SetMessage(
 }
 
 // GetCode retrieves the composed code of the error
-func (e StatusError) GetCode() string {
+func (e *StatusError) GetCode() string {
 	return e.Code
 }
 
 // GetMessage retrieves the message associated to the error
-func (e StatusError) GetMessage() string {
+func (e *StatusError) GetMessage() string {
 	return e.Message
 }
 

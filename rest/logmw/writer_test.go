@@ -12,7 +12,7 @@ import (
 
 func Test_NewResponseWriter(t *testing.T) {
 	t.Run("error when missing writer", func(t *testing.T) {
-		if _, e := newResponseWriter(nil); e == nil {
+		if _, e := NewWriter(nil); e == nil {
 			t.Error("didn't returned the expected error")
 		} else if !errors.Is(e, slate.ErrNilPointer) {
 			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
@@ -25,7 +25,7 @@ func Test_NewResponseWriter(t *testing.T) {
 
 		writer := NewMockResponseWriter(ctrl)
 
-		if value, e := newResponseWriter(writer); e != nil {
+		if value, e := NewWriter(writer); e != nil {
 			t.Errorf("return the (%v) error", e)
 		} else if value == nil {
 			t.Error("didn't returned a valid reference")

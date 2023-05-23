@@ -1,7 +1,8 @@
-package logmw
+package xml
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -11,12 +12,11 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/happyhippyhippo/slate"
 	"github.com/happyhippyhippo/slate/log"
-	"github.com/pkg/errors"
 )
 
-func Test_NewResponseReaderDecoratorXML(t *testing.T) {
+func Test_NewRequestReaderDecoratorXML(t *testing.T) {
 	t.Run("nil reader", func(t *testing.T) {
-		if _, e := NewResponseReaderDecoratorXML(nil, nil); e == nil {
+		if _, e := NewDecorator(nil, nil); e == nil {
 			t.Error("didn't returned the expected error")
 		} else if !errors.Is(e, slate.ErrNilPointer) {
 			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
@@ -27,30 +27,10 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		ginWriter := NewMockResponseWriter(ctrl)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return nil, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, nil)
+		reader := func(ctx *gin.Context) (log.Context, error) { return nil, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
-		result, e := decorator(nil, ginWriter, 0)
-		switch {
-		case e == nil:
-			t.Error("didn't returned the expected error")
-		case !errors.Is(e, slate.ErrNilPointer):
-			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
-		case result != nil:
-			t.Errorf("returned the unexpeted context data : %v", result)
-		}
-	})
-
-	t.Run("nil writer", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-
-		ctx := &gin.Context{}
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return nil, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, nil)
-
-		result, e := decorator(ctx, nil, 0)
+		result, e := decorator(nil)
 		switch {
 		case e == nil:
 			t.Error("didn't returned the expected error")
@@ -69,12 +49,10 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return nil, expected }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, nil)
+		reader := func(ctx *gin.Context) (log.Context, error) { return nil, expected }
+		decorator, _ := NewDecorator(reader, nil)
 
-		result, e := decorator(ctx, writer, 0)
+		result, e := decorator(ctx)
 		switch {
 		case e == nil:
 			t.Error("didn't returned the expected error")
@@ -85,20 +63,22 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		}
 	})
 
-	t.Run("missing body does not add decorated field", func(t *testing.T) {
+	t.Run("empty content-type does not add decorated field", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		data := log.Context{}
+		model := struct {
+			XMLName xml.Name `xml:"message"`
+			Field   string   `xml:"field"`
+		}{}
+		data := log.Context{"body": "<message><field>value</field></message>"}
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, nil)
+		reader := func(ctx *gin.Context) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, &model)
 
-		result, e := decorator(ctx, writer, 0)
+		result, e := decorator(ctx)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected (%v) error", e)
@@ -111,7 +91,7 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		}
 	})
 
-	t.Run("empty accept does not add decorated field", func(t *testing.T) {
+	t.Run("non-xml content-type does not add decorated field", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
@@ -123,43 +103,11 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, &model)
+		ctx.Request.Header.Add("Content-Type", gin.MIMEJSON)
+		reader := func(ctx *gin.Context) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, &model)
 
-		result, e := decorator(ctx, writer, 0)
-		switch {
-		case e != nil:
-			t.Errorf("returned the unexpected (%v) error", e)
-		case result == nil:
-			t.Error("didn't returned the expected context data")
-		default:
-			if _, ok := result["bodyXml"]; ok {
-				t.Error("added the bodyXml field")
-			}
-		}
-	})
-
-	t.Run("non-xml accept does not add decorated field", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-		defer ctrl.Finish()
-
-		model := struct {
-			XMLName xml.Name `xml:"message"`
-			Field   string   `xml:"field"`
-		}{}
-		data := log.Context{"body": "<message><field>value</field></message>"}
-		ctx := &gin.Context{}
-		ctx.Request = &http.Request{}
-		ctx.Request.Header = http.Header{}
-		ctx.Request.Header.Add("Accept", gin.MIMEJSON)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, &model)
-
-		result, e := decorator(ctx, writer, 0)
+		result, e := decorator(ctx)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected (%v) error", e)
@@ -180,17 +128,16 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 			XMLName xml.Name `xml:"message"`
 			Field   string   `xml:"field"`
 		}{}
-		data := log.Context{"body": "<message> field value /field /message>"}
+		data := log.Context{"body": "<message field value /field /message>"}
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ctx.Request.Header.Add("Accept", gin.MIMEXML)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, &model)
+		ctx.Request.Header.Add("Content-Type", gin.MIMEXML)
+		ctx.Request.Header.Add("Content-Type", gin.MIMEXML)
+		reader := func(ctx *gin.Context) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, &model)
 
-		result, e := decorator(ctx, writer, 0)
+		result, e := decorator(ctx)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected (%v) error", e)
@@ -219,13 +166,11 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ctx.Request.Header.Add("Accept", gin.MIMEXML)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, &model)
+		ctx.Request.Header.Add("Content-Type", gin.MIMEXML)
+		reader := func(ctx *gin.Context) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, &model)
 
-		result, e := decorator(ctx, writer, 0)
+		result, e := decorator(ctx)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected (%v) error", e)
@@ -256,13 +201,11 @@ func Test_NewResponseReaderDecoratorXML(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ctx.Request.Header.Add("Accept", gin.MIMEXML2)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorXML(reader, &model)
+		ctx.Request.Header.Add("Content-Type", gin.MIMEXML2)
+		reader := func(ctx *gin.Context) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, &model)
 
-		result, e := decorator(ctx, writer, 0)
+		result, e := decorator(ctx)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected (%v) error", e)

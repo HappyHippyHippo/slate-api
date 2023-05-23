@@ -161,7 +161,7 @@ func NewParser(
 
 // Parse method that will convert the list of validation error into
 // an envelope struct to be used as the endpoint response.
-func (p parser) Parse(
+func (p *parser) Parse(
 	val interface{},
 	errs validator.ValidationErrors,
 ) (*envelope.Envelope, error) {
@@ -193,7 +193,7 @@ func (p *parser) AddError(
 	p.mapper[e] = code
 }
 
-func (p parser) convert(
+func (p *parser) convert(
 	value interface{},
 	e validator.FieldError,
 ) (*envelope.StatusError, error) {

@@ -2,41 +2,22 @@ package cache
 
 import (
 	"github.com/happyhippyhippo/slate"
+	api "github.com/happyhippyhippo/slate-api"
 )
 
 const (
 	// ID defines the id to be used as the container
 	// registration id of a cache pool instance, as a base id of all other
 	// cache package instances registered in the application container.
-	ID = slate.ID + ".cache"
+	ID = api.ID + ".cache"
 
 	// StoreStrategyTag defines the tag to be assigned to all
-	// container store strategies.
-	StoreStrategyTag = ID + ".store.strategy"
-
-	// InMemoryStrategyID defines the id to be used as
-	// the container registration id of an in-memory store factory
-	// strategy instance.
-	InMemoryStrategyID = ID + ".store.strategy.in_memory"
-
-	// MemcachedStrategyID defines the id to be used as
-	// the container registration id of a memcached service store factory
-	// strategy instance.
-	MemcachedStrategyID = ID + ".store.strategy.memcached"
-
-	// BinaryMemcachedStrategyID defines the id to be used as
-	// the container registration id of a binary connection memcached
-	// service store factory strategy instance.
-	BinaryMemcachedStrategyID = ID + ".store.strategy.binary_memcached"
-
-	// RedisStrategyID defines the id to be used as
-	// the container registration id of a redis
-	// service store factory strategy instance.
-	RedisStrategyID = ID + ".store.strategy.redis"
+	// container Store strategies.
+	StoreStrategyTag = ID + ".Store.strategy"
 
 	// StoreFactoryID defines the id to be used as
-	//	// the container registration id of a store factory instance.
-	StoreFactoryID = ID + ".store.factory"
+	//	// the container registration id of a Store factory instance.
+	StoreFactoryID = ID + ".Store.factory"
 )
 
 // Provider defines the slate.cache module service provider to be used on
@@ -48,35 +29,34 @@ var _ slate.IProvider = &Provider{}
 // Register will register the cache package instances in the
 // application container.
 func (p Provider) Register(
-	container ...slate.IContainer,
+	container slate.IContainer,
 ) error {
 	// check container argument reference
-	if len(container) == 0 || container[0] == nil {
+	if container == nil {
 		return errNilPointer("container")
 	}
 	// add store strategies and factory
-	_ = container[0].Service(InMemoryStrategyID, NewInMemoryStoreStrategy, StoreStrategyTag)
-	_ = container[0].Service(StoreFactoryID, NewStoreFactory)
+	_ = container.Service(StoreFactoryID, NewStoreFactory)
 	// add store pool instance
-	_ = container[0].Service(ID, NewStorePool)
+	_ = container.Service(ID, NewStorePool)
 	return nil
 }
 
 // Boot will start the cache package.
 func (p Provider) Boot(
-	container ...slate.IContainer,
+	container slate.IContainer,
 ) error {
 	// check container argument reference
-	if len(container) == 0 || container[0] == nil {
+	if container == nil {
 		return errNilPointer("container")
 	}
-	// populate the container store factory with
-	// all registered store strategies
-	storeFactory, e := p.getStoreFactory(container[0])
+	// populate the container Store factory with
+	// all registered Store strategies
+	storeFactory, e := p.getStoreFactory(container)
 	if e != nil {
 		return e
 	}
-	storeStrategies, e := p.getStoreStrategies(container[0])
+	storeStrategies, e := p.getStoreStrategies(container)
 	if e != nil {
 		return e
 	}

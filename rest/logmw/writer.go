@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type responseWriter interface {
+type Writer interface {
 	gin.ResponseWriter
 	Body() []byte
 }
@@ -18,9 +18,10 @@ type writer struct {
 
 var _ gin.ResponseWriter = &writer{}
 
-func newResponseWriter(
+// NewWriter @todo doc
+func NewWriter(
 	w gin.ResponseWriter,
-) (responseWriter, error) {
+) (Writer, error) {
 	// check the writer argument reference
 	if w == nil {
 		return nil, errNilPointer("writer")

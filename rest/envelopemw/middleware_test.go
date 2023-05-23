@@ -306,7 +306,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(0, expected),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(0, expected),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -341,7 +341,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(0, expected),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(0, expected),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -376,7 +376,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(0, expected),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(0, expected),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -411,7 +411,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(0, expected),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(0, expected),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -441,13 +441,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -469,13 +469,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -506,13 +506,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -544,13 +544,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -582,13 +582,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -620,13 +620,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -658,13 +658,13 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
 			cfgManager.EXPECT().AddObserver(ServiceIDConfigPath, gomock.Any()).Return(nil),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -698,7 +698,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -710,7 +710,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					return nil
 				}),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -747,7 +747,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -759,7 +759,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					return nil
 				}),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.ERROR, LogServiceErrorMessage, log.Context{"value": newValue})
@@ -785,7 +785,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -797,7 +797,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					return nil
 				}),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal("test", log.ERROR, LogServiceErrorMessage, log.Context{"value": newValue})
@@ -823,7 +823,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -835,7 +835,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					return nil
 				}),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.DEBUG, LogServiceErrorMessage, log.Context{"value": newValue})
@@ -861,7 +861,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -873,7 +873,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					return nil
 				}),
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.ERROR, "test", log.Context{"value": newValue})
@@ -894,7 +894,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -906,7 +906,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 
@@ -943,7 +943,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -955,7 +955,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.ERROR, LogAcceptListErrorMessage, log.Context{"list": newValue})
@@ -981,7 +981,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -993,7 +993,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal("test", log.ERROR, LogAcceptListErrorMessage, log.Context{"list": newValue})
@@ -1019,7 +1019,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -1031,7 +1031,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.DEBUG, LogAcceptListErrorMessage, log.Context{"list": newValue})
@@ -1057,7 +1057,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -1069,7 +1069,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.ERROR, "test", log.Context{"list": newValue})
@@ -1092,7 +1092,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -1104,7 +1104,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.ERROR, LogAcceptListErrorMessage, log.Context{"value": invalidValue})
@@ -1131,7 +1131,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -1143,7 +1143,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal("test", log.ERROR, LogAcceptListErrorMessage, log.Context{"value": invalidValue})
@@ -1170,7 +1170,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -1182,7 +1182,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.DEBUG, LogAcceptListErrorMessage, log.Context{"value": invalidValue})
@@ -1209,7 +1209,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEXML}, nil).Times(1)
 		gomock.InOrder(
@@ -1221,7 +1221,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 					callback = cb
 					return nil
 				}),
-			cfgManager.EXPECT().AddObserver("slate.rest.endpoints.index.id", gomock.Any()).Return(nil),
+			cfgManager.EXPECT().AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).Return(nil),
 		)
 		logger := NewMockLog(ctrl)
 		logger.EXPECT().Signal(LogChannel, log.ERROR, "test", log.Context{"value": invalidValue})
@@ -1243,7 +1243,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -1251,7 +1251,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
 			cfgManager.
 				EXPECT().
-				AddObserver("slate.rest.endpoints.index.id", gomock.Any()).
+				AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).
 				DoAndReturn(func(id string, cb config.IObserver) error {
 					callback = cb
 					return nil
@@ -1292,7 +1292,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -1300,7 +1300,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
 			cfgManager.
 				EXPECT().
-				AddObserver("slate.rest.endpoints.index.id", gomock.Any()).
+				AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).
 				DoAndReturn(func(id string, cb config.IObserver) error {
 					callback = cb
 					return nil
@@ -1330,7 +1330,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -1338,7 +1338,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
 			cfgManager.
 				EXPECT().
-				AddObserver("slate.rest.endpoints.index.id", gomock.Any()).
+				AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).
 				DoAndReturn(func(id string, cb config.IObserver) error {
 					callback = cb
 					return nil
@@ -1368,7 +1368,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -1376,7 +1376,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
 			cfgManager.
 				EXPECT().
-				AddObserver("slate.rest.endpoints.index.id", gomock.Any()).
+				AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).
 				DoAndReturn(func(id string, cb config.IObserver) error {
 					callback = cb
 					return nil
@@ -1406,7 +1406,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 		cfgManager := NewMockConfigManager(ctrl)
 		gomock.InOrder(
 			cfgManager.EXPECT().Int(ServiceIDConfigPath, 0).Return(1, nil),
-			cfgManager.EXPECT().Int("slate.rest.endpoints.index.id", 0).Return(2, nil),
+			cfgManager.EXPECT().Int("slate.api.rest.endpoints.index.id", 0).Return(2, nil),
 		)
 		cfgManager.EXPECT().List(FormatAcceptListConfigPath).Return([]interface{}{gin.MIMEJSON}, nil).Times(1)
 		gomock.InOrder(
@@ -1414,7 +1414,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 			cfgManager.EXPECT().AddObserver(FormatAcceptListConfigPath, gomock.Any()).Return(nil),
 			cfgManager.
 				EXPECT().
-				AddObserver("slate.rest.endpoints.index.id", gomock.Any()).
+				AddObserver("slate.api.rest.endpoints.index.id", gomock.Any()).
 				DoAndReturn(func(id string, cb config.IObserver) error {
 					callback = cb
 					return nil

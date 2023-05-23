@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"github.com/golang/mock/gomock"
+	"github.com/happyhippyhippo/slate-api/rest/logmw/response"
 	"github.com/happyhippyhippo/slate/log"
 )
 
@@ -20,7 +21,7 @@ type MockResponseWriter struct {
 	recorder *MockResponseWriterRecorder
 }
 
-var _ responseWriter = &MockResponseWriter{}
+var _ response.responseWriter = &MockResponseWriter{}
 
 // MockResponseWriterRecorder is the mock recorder for MockResponseWriter
 type MockResponseWriterRecorder struct {

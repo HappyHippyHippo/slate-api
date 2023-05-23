@@ -34,7 +34,7 @@ func NewEnvelope(
 }
 
 // GetStatusCode returned the stored enveloped response status code
-func (s Envelope) GetStatusCode() int {
+func (s *Envelope) GetStatusCode() int {
 	return s.StatusCode
 }
 

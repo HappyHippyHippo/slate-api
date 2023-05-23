@@ -10,7 +10,7 @@ import (
 
 const (
 	// EnvID defines the slate.api.rest.log package base environment variable name.
-	EnvID = api.EnvID + "_LOG"
+	EnvID = api.EnvID + "_LOGMW"
 )
 
 var (

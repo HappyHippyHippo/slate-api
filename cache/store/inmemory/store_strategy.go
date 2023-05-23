@@ -1,33 +1,36 @@
-package cache
+//go:build inmemory
+
+package inmemory
 
 import (
 	"time"
 
+	"github.com/happyhippyhippo/slate-api/cache"
 	"github.com/happyhippyhippo/slate/config"
 )
 
 const (
-	// InMemoryStoreType defines the value to be used to
+	// StoreType defines the value to be used to
 	// declare an in-memory store type.
-	InMemoryStoreType = "in-memory"
+	StoreType = "in-memory"
 )
 
 type inMemoryConfig struct {
 	DefaultExpiration uint32
 }
 
-// InMemoryStoreStrategy @todo doc
-type InMemoryStoreStrategy struct{}
+// StoreStrategy @todo doc
+type StoreStrategy struct{}
 
-var _ IStoreStrategy = &InMemoryStoreStrategy{}
+var _ cache.IStoreStrategy = &StoreStrategy{}
 
-// NewInMemoryStoreStrategy @todo doc
-func NewInMemoryStoreStrategy() *InMemoryStoreStrategy {
-	return &InMemoryStoreStrategy{}
+// NewStoreStrategy @todo doc
+func NewStoreStrategy() *StoreStrategy {
+	return &StoreStrategy{}
 }
 
 // Accept @todo doc
-func (InMemoryStoreStrategy) Accept(
+func (StoreStrategy) Accept(
 	cfg config.IConfig,
 ) bool {
 	// check the config argument reference
@@ -40,20 +43,20 @@ func (InMemoryStoreStrategy) Accept(
 		return true
 	}
 	// return acceptance for the read config type
-	return sc.Type == InMemoryStoreType
+	return sc.Type == StoreType
 }
 
 // Create @todo doc
-func (InMemoryStoreStrategy) Create(
+func (StoreStrategy) Create(
 	cfg config.IConfig,
-) (IStore, error) {
+) (cache.IStore, error) {
 	// check the config argument reference
 	if cfg == nil {
 		return nil, errNilPointer("config")
 	}
 	// retrieve the data from the configuration
 	sc := inMemoryConfig{
-		DefaultExpiration: uint32(DefaultExpiration),
+		DefaultExpiration: uint32(cache.DefaultExpiration),
 	}
 	_, e := cfg.Populate("", &sc)
 	if e != nil {
@@ -64,7 +67,7 @@ func (InMemoryStoreStrategy) Create(
 		return nil, errInvalidStore(cfg, map[string]interface{}{"description": "missing expiration"})
 	}
 	// return the instantiated in-memory store
-	return NewInMemoryStore(
+	return NewStore(
 		time.Duration(sc.DefaultExpiration) * time.Millisecond,
 	), nil
 }

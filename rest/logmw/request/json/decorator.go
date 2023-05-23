@@ -1,20 +1,21 @@
-package logmw
+package json
 
 import (
-	"encoding/xml"
+	"encoding/json"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/happyhippyhippo/slate-api/rest/logmw"
 	"github.com/happyhippyhippo/slate/log"
 )
 
-// NewRequestReaderDecoratorXML will instantiate a new request
-// event context reader XML decorator used to parse the request body as an XML
+// NewDecorator will instantiate a new request
+// event context reader JSON decorator used to parse the request body as a JSON
 // and add the parsed content into the logging data.
-func NewRequestReaderDecoratorXML(
-	reader RequestReader,
+func NewDecorator(
+	reader logmw.RequestReader,
 	model interface{},
-) (RequestReader, error) {
+) (logmw.RequestReader, error) {
 	// check the reader argument reference
 	if reader == nil {
 		return nil, errNilPointer("reader")
@@ -28,17 +29,17 @@ func NewRequestReaderDecoratorXML(
 			return nil, errNilPointer("ctx")
 		}
 		// read the logging request data from the context
-		data, err := reader(ctx)
-		if err != nil {
-			return nil, err
+		data, e := reader(ctx)
+		if e != nil {
+			return nil, e
 		}
 		// try to unmarshall the request body content if the request
-		// is in XML format, and store it in the data map on the
-		// bodyXml field
+		// is in JSON format, and store it in the data map on the
+		// bodyJson field
 		contentType := strings.ToLower(ctx.Request.Header.Get("Content-Type"))
-		if strings.HasPrefix(contentType, gin.MIMEXML) || strings.HasPrefix(contentType, gin.MIMEXML2) {
-			if err = xml.Unmarshal([]byte(data["body"].(string)), &model); err == nil {
-				data["bodyXml"] = model
+		if strings.HasPrefix(contentType, gin.MIMEJSON) {
+			if e = json.Unmarshal([]byte(data["body"].(string)), &model); e == nil {
+				data["bodyJson"] = model
 			}
 		}
 		// return the request information

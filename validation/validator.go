@@ -1,7 +1,9 @@
 package validation
 
 import (
+	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	translations "github.com/go-playground/validator/v10/translations/en"
 	"github.com/happyhippyhippo/slate-api/envelope"
 )
 
@@ -12,17 +14,20 @@ type Validator func(val interface{}) (*envelope.Envelope, error)
 
 // NewValidator instantiates a new validation function
 func NewValidator(
-	validate *validator.Validate,
+	translator ut.Translator,
 	parser IParser,
 ) (Validator, error) {
 	// check validate argument reference
-	if validate == nil {
-		return nil, errNilPointer("validate")
+	if translator == nil {
+		return nil, errNilPointer("translator")
 	}
 	// check parser argument reference
 	if parser == nil {
 		return nil, errNilPointer("parser")
 	}
+	// register the translator in the used validator
+	validate := validator.New()
+	_ = translations.RegisterDefaultTranslations(validate, translator)
 	// return the validation method instance
 	return func(value interface{}) (*envelope.Envelope, error) {
 		// check the value argument reference

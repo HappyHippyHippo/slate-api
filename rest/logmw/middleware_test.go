@@ -7,12 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/happyhippyhippo/slate"
+	"github.com/happyhippyhippo/slate-api/rest/logmw/request"
+	"github.com/happyhippyhippo/slate-api/rest/logmw/response"
 	"github.com/happyhippyhippo/slate/log"
 )
 
 func Test_NewMiddlewareGenerator(t *testing.T) {
 	t.Run("nil logger", func(t *testing.T) {
-		generator, e := NewMiddlewareGenerator(nil, RequestReaderDefault, ResponseReaderDefault)
+		generator, e := NewMiddlewareGenerator(nil, request.Reader, response.Reader)
 		switch {
 		case e == nil:
 			t.Errorf("didn't returned the expected error")
@@ -29,7 +31,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 
 		logger := NewMockLog(ctrl)
 
-		generator, e := NewMiddlewareGenerator(logger, nil, ResponseReaderDefault)
+		generator, e := NewMiddlewareGenerator(logger, nil, response.Reader)
 		switch {
 		case e == nil:
 			t.Errorf("didn't returned the expected error")
@@ -46,7 +48,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 
 		logger := NewMockLog(ctrl)
 
-		generator, e := NewMiddlewareGenerator(logger, RequestReaderDefault, nil)
+		generator, e := NewMiddlewareGenerator(logger, request.Reader, nil)
 		switch {
 		case e == nil:
 			t.Errorf("didn't returned the expected error")
@@ -63,7 +65,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 
 		logger := NewMockLog(ctrl)
 
-		generator, e := NewMiddlewareGenerator(logger, RequestReaderDefault, ResponseReaderDefault)
+		generator, e := NewMiddlewareGenerator(logger, request.Reader, response.Reader)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -112,7 +114,7 @@ func Test_NewMiddlewareGenerator(t *testing.T) {
 			}
 			return request, nil
 		}
-		responseReader := func(context *gin.Context, _ responseWriter, sc int) (log.Context, error) {
+		responseReader := func(context *gin.Context, _ response.responseWriter, sc int) (log.Context, error) {
 			if context != ctx {
 				t.Errorf("handler called with unexpected context instance")
 			}

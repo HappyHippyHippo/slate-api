@@ -1,4 +1,4 @@
-package logmw
+package response
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/happyhippyhippo/slate"
+	"github.com/happyhippyhippo/slate-api/rest/logmw"
 	"github.com/happyhippyhippo/slate/log"
 )
 
@@ -17,7 +18,7 @@ func Test_ResponseReaderDefault(t *testing.T) {
 		defer ctrl.Finish()
 
 		statusCode := 200
-		if _, e := ResponseReaderDefault(nil, nil, statusCode); e == nil {
+		if _, e := Reader(nil, nil, statusCode); e == nil {
 			t.Error("didn't returned the expected error")
 		} else if !errors.Is(e, slate.ErrNilPointer) {
 			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
@@ -33,13 +34,13 @@ func Test_ResponseReaderDefault(t *testing.T) {
 		expHeaders := log.Context{"header1": []string{"value1", "value2"}, "header2": "value3"}
 		jsonBody := map[string]interface{}{"field": "value"}
 		rawBody, _ := json.Marshal(jsonBody)
-		ginWriter := NewMockResponseWriter(ctrl)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
 		ginWriter.EXPECT().Status().Return(statusCode).Times(1)
 		ginWriter.EXPECT().Header().Return(headers).Times(1)
-		w, _ := newResponseWriter(ginWriter)
-		w.(*writer).body.Write(rawBody)
+		w, _ := logmw.newResponseWriter(ginWriter)
+		w.(*logmw.writer).body.Write(rawBody)
 
-		if data, e := ResponseReaderDefault(nil, w, statusCode); e != nil {
+		if data, e := Reader(nil, w, statusCode); e != nil {
 			t.Errorf("returned the unextected (%v) error", e)
 		} else if value := data["status"]; value != statusCode {
 			t.Errorf("stored the (%s) status value", value)
@@ -59,13 +60,13 @@ func Test_ResponseReaderDefault(t *testing.T) {
 		expHeaders := log.Context{"header1": []string{"value1", "value2"}, "header2": "value3"}
 		jsonBody := map[string]interface{}{"field": "value"}
 		rawBody, _ := json.Marshal(jsonBody)
-		ginWriter := NewMockResponseWriter(ctrl)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
 		ginWriter.EXPECT().Status().Return(statusCode).Times(1)
 		ginWriter.EXPECT().Header().Return(headers).Times(1)
-		w, _ := newResponseWriter(ginWriter)
-		w.(*writer).body.Write(rawBody)
+		w, _ := logmw.newResponseWriter(ginWriter)
+		w.(*logmw.writer).body.Write(rawBody)
 
-		if data, e := ResponseReaderDefault(nil, w, statusCode+1); e != nil {
+		if data, e := Reader(nil, w, statusCode+1); e != nil {
 			t.Errorf("returned the unextected (%v) error", e)
 		} else if value := data["status"]; value != statusCode {
 			t.Errorf("stored the (%s) status value", value)

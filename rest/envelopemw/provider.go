@@ -19,23 +19,22 @@ var _ slate.IProvider = &Provider{}
 
 // Register will add to the container a new file system adapter instance.
 func (p Provider) Register(
-	container ...slate.IContainer,
+	container slate.IContainer,
 ) error {
 	// check container argument reference
-	if len(container) == 0 || container[0] == nil {
+	if container == nil {
 		return errNilPointer("container")
 	}
-	// register the envelope middleware generator
-	_ = container[0].Service(ID, NewMiddlewareGenerator)
+	_ = container.Service(ID, NewMiddlewareGenerator)
 	return nil
 }
 
 // Boot (no-op).
 func (Provider) Boot(
-	container ...slate.IContainer,
+	container slate.IContainer,
 ) error {
 	// check container argument reference
-	if len(container) == 0 || container[0] == nil {
+	if container == nil {
 		return errNilPointer("container")
 	}
 	return nil

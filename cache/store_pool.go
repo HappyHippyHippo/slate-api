@@ -7,12 +7,12 @@ import (
 	"github.com/happyhippyhippo/slate/config"
 )
 
-// IStorePool defines the interface of a store pool instance.
+// IStorePool defines the interface of a Store pool instance.
 type IStorePool interface {
 	Get(name string) (IStore, error)
 }
 
-// storePool is a database store pool and generator.
+// storePool is a database Store pool and generator.
 type storePool struct {
 	cfg          config.IManager
 	storeFactory IStoreFactory
@@ -22,7 +22,7 @@ type storePool struct {
 var _ IStorePool = &storePool{}
 
 // NewStorePool will instantiate a new relational
-// database store pool instance.
+// database Store pool instance.
 func NewStorePool(
 	cfg config.IManager,
 	factory IStoreFactory,
@@ -35,13 +35,13 @@ func NewStorePool(
 	if factory == nil {
 		return nil, errNilPointer("factory")
 	}
-	// instantiate the store pool instance
+	// instantiate the Store pool instance
 	pool := &storePool{
 		cfg:          cfg,
 		storeFactory: factory,
 		instances:    map[string]IStore{},
 	}
-	// check if is to observe store configuration changes
+	// check if is to observe Store configuration changes
 	if ObserveConfig {
 		// add an observer to the stores config
 		_ = cfg.AddObserver(StoresConfigPath, func(_ interface{}, _ interface{}) {
@@ -58,33 +58,33 @@ func NewStorePool(
 	return pool, nil
 }
 
-// Get execute the process of the store creation based on the
-// base configuration defined by the given name of the store,
-// and apply the extra store cfg also given as arguments.
+// Get execute the process of the Store creation based on the
+// base configuration defined by the given name of the Store,
+// and apply the extra Store cfg also given as arguments.
 func (f *storePool) Get(
 	name string,
 ) (IStore, error) {
-	// check if the store as already been created and return it
+	// check if the Store as already been created and return it
 	if store, ok := f.instances[name]; ok {
 		return store, nil
 	}
-	// generate the configuration path of the requested store
+	// generate the configuration path of the requested Store
 	path := fmt.Sprintf("%s.%s", StoresConfigPath, name)
-	// check if there is a configuration for the requested store
+	// check if there is a configuration for the requested Store
 	if !f.cfg.Has(path) {
 		return nil, errConfigNotFound(path)
 	}
-	// obtain the store configuration
+	// obtain the Store configuration
 	cfg, e := f.cfg.Config(path)
 	if e != nil {
 		return nil, e
 	}
-	// create the store
+	// create the Store
 	store, e := f.storeFactory.Create(cfg)
 	if e != nil {
 		return nil, e
 	}
-	// store the store instance
+	// Store the Store instance
 	f.instances[name] = store
 	return store, nil
 }

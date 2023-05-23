@@ -4,14 +4,14 @@ import (
 	"github.com/happyhippyhippo/slate/config"
 )
 
-// IStoreFactory defined the interface of a store factory instance.
+// IStoreFactory defined the interface of a Store factory instance.
 type IStoreFactory interface {
 	Register(strategy IStoreStrategy) error
 	Create(cfg config.IConfig) (IStore, error)
 }
 
-// StoreFactory is a persistence store generator based on a
-// registered list of store generation strategies.
+// StoreFactory is a persistence Store generator based on a
+// registered list of Store generation strategies.
 type StoreFactory []IStoreStrategy
 
 var _ IStoreFactory = &StoreFactory{}
@@ -21,7 +21,7 @@ func NewStoreFactory() IStoreFactory {
 	return &StoreFactory{}
 }
 
-// Register will register a new store factory strategy to be used
+// Register will register a new Store factory strategy to be used
 // on creation requests.
 func (f *StoreFactory) Register(
 	strategy IStoreStrategy,
@@ -30,12 +30,12 @@ func (f *StoreFactory) Register(
 	if strategy == nil {
 		return errNilPointer("strategy")
 	}
-	// add the strategy to the store factory strategy pool
+	// add the strategy to the Store factory strategy pool
 	*f = append(*f, strategy)
 	return nil
 }
 
-// Create will instantiate and return a new store loaded
+// Create will instantiate and return a new Store loaded
 // by a configuration instance.
 func (f StoreFactory) Create(
 	cfg config.IConfig,
@@ -45,11 +45,11 @@ func (f StoreFactory) Create(
 		return nil, errNilPointer("config")
 	}
 	// search in the factory strategy pool for one that would accept
-	// to generate the requested store with the requested type defined
+	// to generate the requested Store with the requested type defined
 	// in the given config
 	for _, s := range f {
 		if s.Accept(cfg) {
-			// return the creation of the requested store
+			// return the creation of the requested Store
 			return s.Create(cfg)
 		}
 	}

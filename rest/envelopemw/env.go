@@ -8,7 +8,7 @@ import (
 const (
 	// EnvID defines the slate.api.rest.envelopemw package base environment
 	// variable name.
-	EnvID = rest.EnvID + "_ENVELOPE"
+	EnvID = rest.EnvID + "_ENVELOPEMW"
 )
 
 var (

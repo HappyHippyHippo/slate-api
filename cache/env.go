@@ -15,8 +15,8 @@ var (
 	// cache stores connection configurations.
 	StoresConfigPath = env.String(EnvID+"_STORES_CONFIG_PATH", "slate.api.cache.stores")
 
-	// ObserveConfig defines the store pool cfg observing flag
-	// used to register in the cfg object an observer of the store
+	// ObserveConfig defines the Store pool cfg observing flag
+	// used to register in the cfg object an observer of the Store
 	// cfg entries list, so it can reset the stores pool.
 	ObserveConfig = env.Bool(EnvID+"_OBSERVE_CONFIG", true)
 

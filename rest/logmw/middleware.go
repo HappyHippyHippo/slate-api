@@ -42,16 +42,16 @@ func NewMiddlewareGenerator(
 				ctx *gin.Context,
 			) {
 				// override the context writer
-				w, _ := newResponseWriter(ctx.Writer)
+				w, _ := NewWriter(ctx.Writer)
 				ctx.Writer = w
 				// obtain and log the request content
-				request, _ := requestReader(ctx)
+				req, _ := requestReader(ctx)
 				_ = logger.Signal(
 					RequestChannel,
 					RequestLevel,
 					RequestMessage,
 					log.Context{
-						"request": request,
+						"request": req,
 					},
 				)
 				// execute the endpoint process and calculate the elapsed
@@ -62,14 +62,14 @@ func NewMiddlewareGenerator(
 				}
 				duration := time.Now().UnixMilli() - startTimestamp
 				// obtain and log the request, response and execution duration
-				response, _ := responseReader(ctx, w, statusCode)
+				resp, _ := responseReader(ctx, w, statusCode)
 				_ = logger.Signal(
 					ResponseChannel,
 					ResponseLevel,
 					ResponseMessage,
 					log.Context{
-						"request":  request,
-						"response": response,
+						"request":  req,
+						"response": resp,
 						"duration": duration,
 					},
 				)

@@ -33,41 +33,35 @@ var _ slate.IProvider = &Provider{}
 // Register will register the REST section instances in the
 // application container.
 func (p Provider) Register(
-	container ...slate.IContainer,
+	container slate.IContainer,
 ) error {
 	// check container argument reference
-	if len(container) == 0 || container[0] == nil {
+	if container == nil {
 		return errNilPointer("container")
 	}
-	// add REST engine
-	_ = container[0].Service(EngineID, func() Engine {
-		return gin.New()
-	})
-	// add REST watchdog process instance
-	_ = container[0].Service(ProcessID, NewProcess, watchdog.ProcessTag)
+	_ = container.Service(EngineID, func() Engine { return gin.New() })
+	_ = container.Service(ProcessID, NewProcess, watchdog.ProcessTag)
 	return nil
 }
 
 // Boot will start the REST engine with the defined controllers.
 func (p Provider) Boot(
-	container ...slate.IContainer,
-) error {
+	container slate.IContainer,
+) (e error) {
 	// check container argument reference
-	if len(container) == 0 || container[0] == nil {
+	if container == nil {
 		return errNilPointer("container")
 	}
-	// retrieve the REST engine
-	engine, e := p.getEngine(container[0])
-	if e != nil {
-		return e
-	}
-	// retrieve the controller's registration instances
-	registers, e := p.getRegisters(container[0])
-	if e != nil {
-		return e
-	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			e = r.(error)
+		}
+	}()
+
 	// run the registration process of all retrieved registers
-	for _, reg := range registers {
+	engine := p.getEngine(container)
+	for _, reg := range p.getRegisters(container) {
 		if e := reg.Reg(engine); e != nil {
 			return e
 		}
@@ -77,27 +71,27 @@ func (p Provider) Boot(
 
 func (Provider) getEngine(
 	container slate.IContainer,
-) (Engine, error) {
+) Engine {
 	// retrieve the loader entry
 	entry, e := container.Get(EngineID)
 	if e != nil {
-		return nil, e
+		panic(e)
 	}
 	// validate the retrieved entry type
 	instance, ok := entry.(Engine)
 	if !ok {
-		return nil, errConversion(entry, "rest.Engine")
+		panic(errConversion(entry, "rest.Engine"))
 	}
-	return instance, nil
+	return instance
 }
 
 func (Provider) getRegisters(
 	container slate.IContainer,
-) ([]IEndpointRegister, error) {
+) []IEndpointRegister {
 	// retrieve the strategies entries
 	entries, e := container.Tag(EndpointRegisterTag)
 	if e != nil {
-		return nil, e
+		panic(e)
 	}
 	// type check the retrieved strategies
 	var registers []IEndpointRegister
@@ -106,5 +100,5 @@ func (Provider) getRegisters(
 			registers = append(registers, instance)
 		}
 	}
-	return registers, nil
+	return registers
 }

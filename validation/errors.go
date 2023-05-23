@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	// ErrTranslatorNotFound @todo doc
+	// ErrTranslatorNotFound defines an error that denotes
+	// that a required error translator was not found.
 	ErrTranslatorNotFound = fmt.Errorf("translator not found")
 )
 

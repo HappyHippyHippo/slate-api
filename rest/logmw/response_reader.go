@@ -8,4 +8,4 @@ import (
 // ResponseReader defines the interface methods of a response
 // context reader used to compose the data to be sent to the logger on a
 // response event.
-type ResponseReader func(ctx *gin.Context, writer responseWriter, statusCode int) (log.Context, error)
+type ResponseReader func(ctx *gin.Context, writer Writer, statusCode int) (log.Context, error)

@@ -1,4 +1,4 @@
-package logmw
+package json
 
 import (
 	"fmt"
@@ -9,13 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/happyhippyhippo/slate"
+	"github.com/happyhippyhippo/slate-api/rest/logmw"
+	"github.com/happyhippyhippo/slate-api/rest/logmw/response"
 	"github.com/happyhippyhippo/slate/log"
 	"github.com/pkg/errors"
 )
 
 func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 	t.Run("nil reader", func(t *testing.T) {
-		if _, e := NewResponseReaderDecoratorJSON(nil, nil); e == nil {
+		if _, e := NewDecorator(nil, nil); e == nil {
 			t.Error("didn't returned the expected error")
 		} else if !errors.Is(e, slate.ErrNilPointer) {
 			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
@@ -26,9 +28,9 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
-		ginWriter := NewMockResponseWriter(ctrl)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return nil, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return nil, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(nil, ginWriter, 0)
 		switch {
@@ -46,8 +48,8 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		defer ctrl.Finish()
 
 		ctx := &gin.Context{}
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return nil, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return nil, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, nil, 0)
 		switch {
@@ -68,10 +70,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return nil, expected }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return nil, expected }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {
@@ -92,10 +94,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {
@@ -118,10 +120,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx := &gin.Context{}
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {
@@ -145,10 +147,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
 		ctx.Request.Header.Add("Accept", gin.MIMEXML)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {
@@ -172,10 +174,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
 		ctx.Request.Header.Add("Accept", gin.MIMEJSON)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {
@@ -200,10 +202,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
 		ctx.Request.Header.Add("Accept", gin.MIMEJSON)
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {
@@ -230,10 +232,10 @@ func Test_NewResponseReaderDecoratorJSON(t *testing.T) {
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
 		ctx.Request.Header.Add("Accept", "*/*")
-		ginWriter := NewMockResponseWriter(ctrl)
-		writer, _ := newResponseWriter(ginWriter)
-		reader := func(_ *gin.Context, _ responseWriter, _ int) (log.Context, error) { return data, nil }
-		decorator, _ := NewResponseReaderDecoratorJSON(reader, nil)
+		ginWriter := logmw.NewMockResponseWriter(ctrl)
+		writer, _ := response.newResponseWriter(ginWriter)
+		reader := func(_ *gin.Context, _ response.responseWriter, _ int) (log.Context, error) { return data, nil }
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx, writer, 0)
 		switch {

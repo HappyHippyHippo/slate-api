@@ -9,7 +9,7 @@ import (
 
 var (
 	// ErrConfigNotFound defines an error that signal that the
-	// configuration to the requested store was not found.
+	// configuration to the requested Store was not found.
 	ErrConfigNotFound = fmt.Errorf("cache store config not found")
 
 	// ErrInvalidStore defines an error that signal that the
@@ -50,18 +50,4 @@ func errInvalidStore(
 	ctx ...map[string]interface{},
 ) error {
 	return slate.NewErrorFrom(ErrInvalidStore, fmt.Sprintf("%v", cfg), ctx...)
-}
-
-func errMiss(
-	key string,
-	ctx ...map[string]interface{},
-) error {
-	return slate.NewErrorFrom(ErrMiss, key, ctx...)
-}
-
-func errNotStored(
-	key string,
-	ctx ...map[string]interface{},
-) error {
-	return slate.NewErrorFrom(ErrNotStored, key, ctx...)
 }

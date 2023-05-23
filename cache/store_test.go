@@ -9,7 +9,7 @@ import (
 func Test_normalizeExpire(t *testing.T) {
 	t.Run("set default value if is equals to global default", func(t *testing.T) {
 		defaultValue := time.Duration(100)
-		sut := store{defaultExpiration: defaultValue}
+		sut := Store{defaultExpiration: defaultValue}
 		if check := sut.normalizeExpire(DEFAULT); check != defaultValue {
 			t.Errorf("normalized to (%v) instead of the expected (%d)", check, defaultValue)
 		}
@@ -17,7 +17,7 @@ func Test_normalizeExpire(t *testing.T) {
 
 	t.Run("set zero if is equals to global forever", func(t *testing.T) {
 		defaultValue := time.Duration(100)
-		sut := store{defaultExpiration: defaultValue}
+		sut := Store{defaultExpiration: defaultValue}
 		if check := sut.normalizeExpire(FOREVER); check != time.Duration(0) {
 			t.Errorf("normalized to (%v) instead of the expected (%d)", check, time.Duration(0))
 		}
@@ -26,7 +26,7 @@ func Test_normalizeExpire(t *testing.T) {
 	t.Run("no-op if not default or forever", func(t *testing.T) {
 		defaultValue := time.Duration(100)
 		value := time.Duration(200)
-		sut := store{defaultExpiration: defaultValue}
+		sut := Store{defaultExpiration: defaultValue}
 		if check := sut.normalizeExpire(value); check != value {
 			t.Errorf("normalized to (%v) instead of the expected (%d)", check, value)
 		}
@@ -36,7 +36,7 @@ func Test_normalizeExpire(t *testing.T) {
 func Test_serialize(t *testing.T) {
 	t.Run("no-op if value is a byte array", func(t *testing.T) {
 		value := []byte("string")
-		check, e := (store{}).serialize(value)
+		check, e := (Store{}).serialize(value)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -109,7 +109,7 @@ func Test_serialize(t *testing.T) {
 		}
 
 		for _, scenario := range scenarios {
-			check, e := (store{}).serialize(scenario.value)
+			check, e := (Store{}).serialize(scenario.value)
 			switch {
 			case e != nil:
 				t.Errorf("returned the unexpected error : %v", e)
@@ -120,7 +120,7 @@ func Test_serialize(t *testing.T) {
 	})
 
 	t.Run("error while trying to serialize the value", func(t *testing.T) {
-		check, e := (store{}).serialize(nil)
+		check, e := (Store{}).serialize(nil)
 		switch {
 		case e == nil:
 			t.Error("didn't returned the expected error")
@@ -134,7 +134,7 @@ func Test_deserialize(t *testing.T) {
 	t.Run("no-op if value is a byte array", func(t *testing.T) {
 		value := []byte("string")
 		check := &[]byte{}
-		e := (store{}).deserialize(value, check)
+		e := (Store{}).deserialize(value, check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -148,7 +148,7 @@ func Test_deserialize(t *testing.T) {
 		check := 0
 		expected := 123456
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -162,7 +162,7 @@ func Test_deserialize(t *testing.T) {
 		check := 0
 		expected := 123456
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -176,7 +176,7 @@ func Test_deserialize(t *testing.T) {
 		check := int8(0)
 		expected := int8(123)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -190,7 +190,7 @@ func Test_deserialize(t *testing.T) {
 		check := int16(0)
 		expected := int16(1234)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -204,7 +204,7 @@ func Test_deserialize(t *testing.T) {
 		check := int32(0)
 		expected := int32(123456)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -218,7 +218,7 @@ func Test_deserialize(t *testing.T) {
 		check := int64(0)
 		expected := int64(123456123456)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -232,7 +232,7 @@ func Test_deserialize(t *testing.T) {
 		check := uint(0)
 		expected := uint(123456)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -246,7 +246,7 @@ func Test_deserialize(t *testing.T) {
 		check := uint8(0)
 		expected := uint8(123)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -260,7 +260,7 @@ func Test_deserialize(t *testing.T) {
 		check := uint16(0)
 		expected := uint16(1234)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -274,7 +274,7 @@ func Test_deserialize(t *testing.T) {
 		check := uint32(0)
 		expected := uint32(123456)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -288,7 +288,7 @@ func Test_deserialize(t *testing.T) {
 		check := uint64(0)
 		expected := uint64(123456123456)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -302,7 +302,7 @@ func Test_deserialize(t *testing.T) {
 		check := float32(0)
 		expected := float32(1.1)
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -316,7 +316,7 @@ func Test_deserialize(t *testing.T) {
 		check := float64(0)
 		expected := 1.1
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -330,7 +330,7 @@ func Test_deserialize(t *testing.T) {
 		check := ""
 		expected := "test string"
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -344,7 +344,7 @@ func Test_deserialize(t *testing.T) {
 		check := struct{ I int }{}
 		expected := struct{ I int }{I: 123}
 
-		e := (store{}).deserialize(value, &check)
+		e := (Store{}).deserialize(value, &check)
 		switch {
 		case e != nil:
 			t.Errorf("returned the unexpected error : %v", e)
@@ -354,7 +354,7 @@ func Test_deserialize(t *testing.T) {
 	})
 
 	t.Run("error while trying to deserialize the value", func(t *testing.T) {
-		if e := (store{}).deserialize(nil, nil); e == nil {
+		if e := (Store{}).deserialize(nil, nil); e == nil {
 			t.Error("didn't returned the expected error")
 		}
 	})

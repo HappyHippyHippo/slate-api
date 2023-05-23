@@ -1,4 +1,4 @@
-package logmw
+package json
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ import (
 
 func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 	t.Run("nil reader", func(t *testing.T) {
-		if _, e := NewRequestReaderDecoratorJSON(nil, nil); e == nil {
+		if _, e := NewDecorator(nil, nil); e == nil {
 			t.Error("didn't returned the expected error")
 		} else if !errors.Is(e, slate.ErrNilPointer) {
 			t.Errorf("returned the (%v) error when expecting (%v)", e, slate.ErrNilPointer)
@@ -27,7 +27,7 @@ func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 		defer ctrl.Finish()
 
 		reader := func(_ *gin.Context) (log.Context, error) { return nil, nil }
-		decorator, _ := NewRequestReaderDecoratorJSON(reader, nil)
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(nil)
 		switch {
@@ -49,7 +49,7 @@ func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
 		reader := func(_ *gin.Context) (log.Context, error) { return nil, expected }
-		decorator, _ := NewRequestReaderDecoratorJSON(reader, nil)
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx)
 		switch {
@@ -71,7 +71,7 @@ func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 		ctx.Request = &http.Request{}
 		ctx.Request.Header = http.Header{}
 		reader := func(_ *gin.Context) (log.Context, error) { return data, nil }
-		decorator, _ := NewRequestReaderDecoratorJSON(reader, nil)
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx)
 		switch {
@@ -96,7 +96,7 @@ func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 		ctx.Request.Header = http.Header{}
 		ctx.Request.Header.Add("Content-Type", gin.MIMEXML)
 		reader := func(_ *gin.Context) (log.Context, error) { return data, nil }
-		decorator, _ := NewRequestReaderDecoratorJSON(reader, nil)
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx)
 		switch {
@@ -122,7 +122,7 @@ func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 		ctx.Request.Header.Add("Content-Type", gin.MIMEJSON)
 		ctx.Request.Header.Add("Content-Type", gin.MIMEXML)
 		reader := func(_ *gin.Context) (log.Context, error) { return data, nil }
-		decorator, _ := NewRequestReaderDecoratorJSON(reader, nil)
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx)
 		switch {
@@ -148,7 +148,7 @@ func Test_NewRequestReaderDecoratorJSON(t *testing.T) {
 		ctx.Request.Header = http.Header{}
 		ctx.Request.Header.Add("Content-Type", gin.MIMEJSON)
 		reader := func(_ *gin.Context) (log.Context, error) { return data, nil }
-		decorator, _ := NewRequestReaderDecoratorJSON(reader, nil)
+		decorator, _ := NewDecorator(reader, nil)
 
 		result, e := decorator(ctx)
 		switch {

@@ -13,14 +13,6 @@ import (
 )
 
 func Test_Provider_Register(t *testing.T) {
-	t.Run("no argument", func(t *testing.T) {
-		if e := (&Provider{}).Register(); e == nil {
-			t.Error("didn't returned the expected error")
-		} else if !errors.Is(e, slate.ErrNilPointer) {
-			t.Errorf("returned the (%v) error when expected (%v)", e, slate.ErrNilPointer)
-		}
-	})
-
 	t.Run("nil container", func(t *testing.T) {
 		if e := (&Provider{}).Register(nil); e == nil {
 			t.Error("didn't returned the expected error")
@@ -144,18 +136,6 @@ func Test_Provider_Register(t *testing.T) {
 }
 
 func Test_Provider_Boot(t *testing.T) {
-	t.Run("no argument", func(t *testing.T) {
-		container := slate.NewContainer()
-		sut := &Provider{}
-		_ = sut.Register(container)
-
-		if e := sut.Boot(); e == nil {
-			t.Error("didn't returned the expected error")
-		} else if !errors.Is(e, slate.ErrNilPointer) {
-			t.Errorf("returned the (%v) error when expected (%v)", e, slate.ErrNilPointer)
-		}
-	})
-
 	t.Run("nil container", func(t *testing.T) {
 		container := slate.NewContainer()
 		sut := &Provider{}

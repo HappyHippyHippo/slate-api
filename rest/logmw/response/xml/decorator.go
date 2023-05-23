@@ -1,20 +1,21 @@
-package logmw
+package xml
 
 import (
 	"encoding/xml"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/happyhippyhippo/slate-api/rest/logmw"
 	"github.com/happyhippyhippo/slate/log"
 )
 
-// NewResponseReaderDecoratorXML will instantiate a new response
+// NewDecorator will instantiate a new response
 // event context reader XML decorator used to parse the response body as an XML
 // and add the parsed content into the logging data.
-func NewResponseReaderDecoratorXML(
-	reader ResponseReader,
+func NewDecorator(
+	reader logmw.ResponseReader,
 	model interface{},
-) (ResponseReader, error) {
+) (logmw.ResponseReader, error) {
 	// check the reader argument reference
 	if reader == nil {
 		return nil, errNilPointer("reader")
@@ -22,7 +23,7 @@ func NewResponseReaderDecoratorXML(
 	// return the decorated response reader method
 	return func(
 		ctx *gin.Context,
-		writer responseWriter,
+		writer logmw.Writer,
 		statusCode int,
 	) (log.Context, error) {
 		// check the context argument reference

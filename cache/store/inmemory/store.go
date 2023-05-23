@@ -1,13 +1,16 @@
-package cache
+//go:build inmemory
+
+package inmemory
 
 import (
 	"reflect"
 	"time"
 
-	"github.com/robfig/go-cache"
+	"github.com/happyhippyhippo/slate-api/cache"
+	gocache "github.com/robfig/go-cache"
 )
 
-type inMemoryClient interface {
+type client interface {
 	Set(key string, value interface{}, expire time.Duration)
 	Add(key string, value interface{}, expire time.Duration) error
 	Replace(key string, value interface{}, expire time.Duration) error
@@ -18,31 +21,29 @@ type inMemoryClient interface {
 	Flush()
 }
 
-var _ inMemoryClient = &cache.Cache{}
+var _ client = &gocache.Cache{}
 
-// InMemoryStore represents the cache with memory persistence
-type InMemoryStore struct {
-	store
-	client inMemoryClient
+// Store represents the cache with memory persistence
+type Store struct {
+	cache.Store
+	client client
 }
 
-var _ IStore = &InMemoryStore{}
+var _ cache.IStore = &Store{}
 
-// NewInMemoryStore returns a InMemoryStore
-func NewInMemoryStore(
+// NewStore returns a Store
+func NewStore(
 	defaultExpiration time.Duration,
-) *InMemoryStore {
+) *Store {
 	// return the initialized in-memory store struct
-	return &InMemoryStore{
-		store: store{
-			defaultExpiration: defaultExpiration,
-		},
-		client: cache.New(defaultExpiration, time.Minute),
+	return &Store{
+		Store:  *cache.NewStore(defaultExpiration),
+		client: gocache.New(defaultExpiration, time.Minute),
 	}
 }
 
 // Get (see IStore interface)
-func (c *InMemoryStore) Get(
+func (c *Store) Get(
 	key string,
 	value interface{},
 ) error {
@@ -62,7 +63,7 @@ func (c *InMemoryStore) Get(
 }
 
 // Set (see IStore interface)
-func (c *InMemoryStore) Set(
+func (c *Store) Set(
 	key string,
 	value interface{},
 	expire time.Duration,
@@ -73,7 +74,7 @@ func (c *InMemoryStore) Set(
 }
 
 // Add (see IStore interface)
-func (c *InMemoryStore) Add(
+func (c *Store) Add(
 	key string,
 	value interface{},
 	expire time.Duration,
@@ -81,14 +82,14 @@ func (c *InMemoryStore) Add(
 	// add the value to the memory, and signal error storing if the
 	// key already exists in the memory persistence layer
 	err := c.client.Add(key, value, expire)
-	if err == cache.ErrKeyExists {
+	if err == gocache.ErrKeyExists {
 		return errNotStored(key)
 	}
 	return err
 }
 
 // Replace (see IStore interface)
-func (c *InMemoryStore) Replace(
+func (c *Store) Replace(
 	key string,
 	value interface{},
 	expire time.Duration,
@@ -101,7 +102,7 @@ func (c *InMemoryStore) Replace(
 }
 
 // Delete (see IStore interface)
-func (c *InMemoryStore) Delete(
+func (c *Store) Delete(
 	key string,
 ) error {
 	// try to remove a value stored in memory marked with the requested key
@@ -112,35 +113,35 @@ func (c *InMemoryStore) Delete(
 }
 
 // Increment (see IStore interface)
-func (c *InMemoryStore) Increment(
+func (c *Store) Increment(
 	key string,
 	n uint64,
 ) (uint64, error) {
 	// try to increment a value stored in memory or signal a cache miss
 	// if not present
 	newValue, err := c.client.Increment(key, n)
-	if err == cache.ErrCacheMiss {
+	if err == gocache.ErrCacheMiss {
 		return 0, errMiss(key)
 	}
 	return newValue, err
 }
 
 // Decrement (see IStore interface)
-func (c *InMemoryStore) Decrement(
+func (c *Store) Decrement(
 	key string,
 	n uint64,
 ) (uint64, error) {
 	// try to decrement a value stored in memory or signal a cache miss
 	// if not present
 	newValue, err := c.client.Decrement(key, n)
-	if err == cache.ErrCacheMiss {
+	if err == gocache.ErrCacheMiss {
 		return 0, errMiss(key)
 	}
 	return newValue, err
 }
 
 // Flush (see IStore interface)
-func (c *InMemoryStore) Flush() error {
+func (c *Store) Flush() error {
 	// flush the cache
 	c.client.Flush()
 	return nil
